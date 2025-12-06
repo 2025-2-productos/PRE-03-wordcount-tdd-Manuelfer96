@@ -1,10 +1,11 @@
 
 
 import argparse
-import os
-import re
-from collections import defaultdict, Counter
 from homework.src._internals.read_all_lines import read_all_lines
+from homework.src._internals.count_words import count_words
+from homework.src._internals.preprocess_lines import preprocess_lines
+from homework.src._internals.split_into_words import split_into_words
+from homework.src._internals.write_word_counts import write_word_counts
 
 
 def parse_args():
@@ -21,43 +22,6 @@ def parse_args():
     parsed_args = parser.parse_args()
 
     return parsed_args.input, parsed_args.output
-
-
-def preprocess_lines(lines):
-    return [line.strip().lower() for line in lines]
-
-
-def split_into_words(preprocessed_lines):
-    words = []
-    for line in preprocessed_lines:
-        line = re.sub(r"[^\w\s]", "", line)
-        words.extend(line.split())
-    return words
-
-
-
-
-def count_words(words):
-    """
-    Counts the occurrences of each word in the given list.
-
-    Parameters:
-        words (list of str): The list of words to count.
-
-    Returns:
-        Counter: A Counter object mapping words to their counts.
-    """
-    return Counter(words)
-
-def write_word_counts(output_folder, word_counts):
-
-    if not os.path.exists(output_folder):
-        os.makedirs(output_folder)
-
-    output_file_path = os.path.join(output_folder, "wordcount.tsv")
-    with open(output_file_path, "w", encoding="utf-8") as file:
-        for word, count in word_counts.items():
-            file.write(f"{word}\t{count}\n")
 
 
 def main():
